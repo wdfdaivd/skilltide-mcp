@@ -76,7 +76,21 @@ TOOLS = [
 ]
 
 
+class DbMissing(Exception):
+    """★ task-206: 目录库不存在 —— 用一个明确的异常类型，让上层给【人话错误】。"""
+
+
 def connect():
+    # ★ task-206（Glama 门槛要求"能独立启动"）: 在没有目录库的环境里
+    #   （Glama 沙箱 / 别人 git clone 后），原来会抛
+    #   "OperationalError: unable to open database file" —— 那是栈内术语，
+    #   使用者不知道该怎么办。⇒ 改成【明确的前置检查 + 人话错误】。
+    #   ★ initialize / tools/list 【不碰库】，所以仍然正常（Glama 的 introspection 只要这个）。
+    if not os.path.exists(DB):
+        raise DbMissing(
+            f'catalogue database not found at {DB}. '
+            f'Set SKILLTIDE_DB to the path of your copy of the SQLite catalogue '
+            f'(see README, section Configuration).')
     c = sqlite3.connect(f'file:{DB}?mode=ro', uri=True)
     c.row_factory = sqlite3.Row
     return c
@@ -297,6 +311,10 @@ def handle(msg):
             return reply(mid, error={'code': -32602, 'message': f'unknown tool: {name}'})
         try:
             out = h(args)
+        except DbMissing as e:
+            # ★ 缺库不是"程序坏了"，是"还没配置" ⇒ 报清楚怎么配，而不是抛栈
+            return reply(mid, {'content': [{'type': 'text', 'text': str(e)}],
+                               'isError': True})
         except Exception as e:
             return reply(mid, {'content': [{'type': 'text',
                                             'text': f'error: {type(e).__name__}: {e}'}],
