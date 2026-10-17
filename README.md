@@ -113,3 +113,28 @@ unknown-tool error, and `ping`.
 ## License
 
 MIT
+---
+
+## Remote endpoint (no install needed)
+
+SkillTide is also available as a **hosted Streamable HTTP MCP server** — nothing to install:
+
+```json
+{"mcpServers": {"skilltide": {"url": "https://anclum.com/mcp"}}}
+```
+
+Listed in the **official MCP Registry** as `io.github.wdfdaivd/skilltide-mcp`:
+
+```bash
+curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=skilltide"
+```
+
+Read-only, rate limited (10 req/min per IP, burst 20), and it answers in tens of milliseconds:
+
+| Tool | What it does |
+|---|---|
+| `search_tools` | Free-text search across 7,500+ MCP servers, agent skills and open-source AI projects, plus 1,500 AI tools |
+| `get_tool` | Fetch one catalogue entry by its key |
+| `list_categories` | List the taxonomies with live counts |
+
+Every result links to a **verified official URL** (no redirect pages, no tracking parameters) and carries provenance: source count, first/last seen.
