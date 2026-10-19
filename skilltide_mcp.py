@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-r"""skilltide-mcp —— 用 MCP server 的形式暴露 SkillTide 的目录，让 AI agent 能搜索。
+r"""skilltide-mcp —— 用 MCP server 的形式暴露 Anclum 的目录，让 AI agent 能搜索。
 
 ★ 为什么做它（lead 查证的外链钥匙）:
    · awesome-mcp-servers 的 Scope 明文: 只收【有公开 GitHub 仓库、可安装运行的 MCP server】，
@@ -30,15 +30,15 @@ import re
 import sqlite3
 import sys
 
-DB = os.environ.get('SKILLTIDE_DB', '/opt/dsh-app/var/aggregator.db')
-SERVER_NAME = 'skilltide-mcp'
+DB = (os.environ.get('ANCLUM_DB')\n      or os.environ.get('SKILLTIDE_DB')\n      or '/opt/dsh-app/var/aggregator.db')
+SERVER_NAME = 'anclum'
 SERVER_VERSION = '0.1.0'
 PROTOCOL = '2024-11-05'
 
 TOOLS = [
     {
         'name': 'search_tools',
-        'description': ('Search SkillTide\'s catalogue of 7,500+ MCP servers, agent skills and '
+        'description': ('Search Anclum\'s catalogue of 8,250 MCP servers, agent skills and '
                         'open-source AI projects, plus 1,500 AI tools. Returns name, url, '
                         'one-line summary and tags. Read-only.'),
         'inputSchema': {
@@ -57,7 +57,7 @@ TOOLS = [
     },
     {
         'name': 'get_tool',
-        'description': ('Get one catalogue entry by its key (the slug used in its SkillTide URL). '
+        'description': ('Get one catalogue entry by its key (the slug used in its Anclum URL). '
                         'Returns the full record: name, url, description, tags, source, '
                         'first/last seen. Read-only.'),
         'inputSchema': {
@@ -89,7 +89,7 @@ def connect():
     if not os.path.exists(DB):
         raise DbMissing(
             f'catalogue database not found at {DB}. '
-            f'Set SKILLTIDE_DB to the path of your copy of the SQLite catalogue '
+            f'Set ANCLUM_DB to the path of your copy of the SQLite catalogue '
             f'(see README, section Configuration).')
     c = sqlite3.connect(f'file:{DB}?mode=ro', uri=True)
     c.row_factory = sqlite3.Row
@@ -121,13 +121,15 @@ def _entry(r, kind):
             out['fields'] = []
         out['first_seen'] = r.get('first_seen')
         out['last_seen'] = r.get('last_seen')
-        out['skilltide_url'] = f"https://anclum.com/en/s/{r.get('key')}/"
+        out['anclum_url'] = f"https://anclum.com/en/s/{r.get('key')}/"
+        out['skilltide_url'] = out['anclum_url']  # legacy name, kept so existing clients do not break
     else:
         out['category'] = r.get('category')
         out['cn_ui'] = ((r.get('cn_verdict') or '') == '中文界面')
         out['icp_filed'] = bool((r.get('icp') or '').strip())
         out['price'] = r.get('price_tier') or 'unknown'
-        out['skilltide_url'] = f"https://anclum.com/en/ai/{r.get('category')}/"
+        out['anclum_url'] = f"https://anclum.com/en/ai/{r.get('category')}/"
+        out['skilltide_url'] = out['anclum_url']  # legacy name, kept so existing clients do not break
     return out
 
 
