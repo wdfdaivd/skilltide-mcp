@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.wdfdaivd/anclum",
   "title": "Anclum",
-  "description": "Search 7,500+ MCP servers and agent skills plus 1,500 AI tools. Read-only.",
+  "description": "Search 8,250 MCP servers and agent skills plus 1,500 AI tools. Read-only.",
   "version": "0.2.0",
   "websiteUrl": "https://anclum.com/en/mcp-directory/",
   "repository": {
