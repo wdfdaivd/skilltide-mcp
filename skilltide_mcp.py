@@ -34,7 +34,7 @@ DB = (os.environ.get('ANCLUM_DB')
       or os.environ.get('SKILLTIDE_DB')
       or '/opt/dsh-app/var/aggregator.db')
 SERVER_NAME = 'anclum'
-SERVER_VERSION = '0.1.0'
+SERVER_VERSION = '0.2.0'
 PROTOCOL = '2024-11-05'
 
 TOOLS = [
