@@ -1,7 +1,6 @@
 # Anclum
 
-An MCP server that lets an AI agent search **Anclum** — a catalogue of 8,250 MCP servers,
-agent skills and open-source AI projects, plus 1,500 AI tools for people who are not
+An MCP server that lets an AI agent search **Anclum** — a catalogue of MCP servers, agent skills and open-source AI projects, plus AI tools for people who are not
 developers.
 
 Read-only. Zero dependencies. One file.
