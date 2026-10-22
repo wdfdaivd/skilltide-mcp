@@ -16,7 +16,7 @@ Most directories give you a name and a link. These are the things we actually ve
 before putting an entry in — each of them is checkable from the server's own output:
 
 - **Official links only.** Every AI-tool link points at the tool's own site. We measured
-  1,501 links: **0 redirect/link-wrapper pages, 0 tracking parameters**. Many directories
+  Every link checked: **0 redirect/link-wrapper pages, 0 tracking parameters**. Many directories
   in this space pass through the affiliate or redirect URL they were given.
 - **Provenance is visible.** `get_tool` returns how many sources listed an entry, when we
   first and last saw it, and the raw source field — so an agent (or a person) can judge
@@ -49,7 +49,7 @@ milliseconds:
 
 | Tool | What it does |
 |---|---|
-| `search_tools` | Free-text search across 8,250 MCP servers, agent skills and open-source AI projects, plus 1,500 AI tools |
+| `search_tools` | Free-text search across MCP servers, agent skills and open-source AI projects, plus AI tools |
 | `get_tool` | Fetch one catalogue entry by its key |
 | `list_categories` | List the taxonomies with live counts |
 
@@ -120,14 +120,14 @@ commands), and the upstream repo.
 ### `list_categories()`
 
 The two taxonomies, with counts: 15 AI-tool categories and 21 field tags
-(e.g. `MCP 服务` 5,585 · `Agent 技能` 133). Use a value as `category` in `search_tools`.
+(e.g. `MCP 服务` · `Agent 技能`). Use a value as `category` in `search_tools`.
 
 ## Data
 
 | Source | Rows | What it is |
 |---|---|---|
-| `items` | 8,250 | MCP servers, agent skills, open-source AI projects |
-| `ai_tools` | 1,500 | AI tools for end users — writing, image, video, office… |
+| `items` | (live) | MCP servers, agent skills, open-source AI projects |
+| `ai_tools` | (live) | AI tools for end users — writing, image, video, office… |
 
 The site is <https://anclum.com>. This server only reads; it writes nothing.
 
