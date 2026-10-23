@@ -3,7 +3,7 @@
   "name": "io.github.wdfdaivd/anclum",
   "title": "Anclum",
   "description": "Search a catalogue of MCP servers, agent skills and open-source AI projects, plus AI tools for people who are not developers. Read-only.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "websiteUrl": "https://anclum.com/en/mcp-directory/",
   "repository": {
     "url": "https://github.com/wdfdaivd/skilltide-mcp",
