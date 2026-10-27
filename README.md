@@ -9,6 +9,8 @@ Read-only. Zero dependencies. One file.
 > Registry entry, Glama listing and existing client configs reference it. The product is
 > **Anclum** (site: <https://anclum.com>).
 
+<a href="https://mcprush.com/to/skilltide-mcp?ref=badge"><img width="190" src="https://mcprush.com/badge/skilltide-mcp/card.svg" alt="Anclum MCP server — rated grade A on mcprush"></a>
+
 ## Why this one is different
 
 Most directories give you a name and a link. These are the things we actually verified
