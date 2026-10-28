@@ -194,39 +194,40 @@ def tool_search(args):
     #   实测 '我要做 PPT' 分词成 ['我要做','PPT']，'我要做' 匹配不到任何条目 ⇒ 0 条。
     #   ⇒ 若 AND 无结果、且 token 多于 1 个，则【退回 OR】（任一 token 命中）。
     #   ★ 这是"先精确后宽松"：精确有结果就不放宽（避免噪音），没结果才放宽。
+    #   ★ 2026-10-28: 两处修正
+    #     ① 返回体加 match='any'，让调用方知道结果来自放宽那一遍（此前是静默的）。
+    #     ② 放宽后【按命中 token 数排序】，不再只按 name —— 否则一个废词加一个常用词
+    #        会返回字母序最前的条目（实测 query='zzzq mcp' 全是 06ketan/* 这类）。
+    relaxed = False
     if not res and len(toks) > 1:
-        where = ["COALESCE(hidden,0)=0"]
-        a = []
+        relaxed = True
+        parts, score, pa = [], [], []
         for t in toks:
-            where.append("(name LIKE ? OR one_line LIKE ? OR fields LIKE ?)")
-            a += [f'%{t}%'] * 3
-        sql = ("SELECT key,name,url,one_line,fields,first_seen,last_seen FROM items WHERE "
-               + " OR ".join([w for w in where if w != "COALESCE(hidden,0)=0"])
-               + " ORDER BY name LIMIT ?")
-        # 简化: 直接把 OR 组拼出来（hidden 条件单独 AND）
-        sql = ("SELECT key,name,url,one_line,fields,first_seen,last_seen FROM items "
+            parts.append("(name LIKE ? OR one_line LIKE ? OR fields LIKE ?)")
+            score.append("(CASE WHEN (name LIKE ? OR one_line LIKE ? OR fields LIKE ?) THEN 1 ELSE 0 END)")
+            pa += [f'%{t}%'] * 3
+        sql = ("SELECT key,name,url,one_line,fields,first_seen,last_seen, ("
+               + " + ".join(score) + ") AS hits FROM items "
                "WHERE COALESCE(hidden,0)=0 AND ("
-               + " OR ".join(["(name LIKE ? OR one_line LIKE ? OR fields LIKE ?)"] * len(toks))
-               + ") ORDER BY name LIMIT ?")
-        a = []
-        for t in toks:
-            a += [f'%{t}%'] * 3
-        a.append(lim)
+               + " OR ".join(parts) + ") ORDER BY hits DESC, length(name) ASC, name LIMIT ?")
+        a = pa + pa + [lim]
         for r in _rows(sql, tuple(a)):
             res.append(_entry(r, 'catalogue'))
         if len(res) < lim:
-            sql2 = ("SELECT key,name,clean_url AS url,one_liner,category,cn_verdict,icp,price_tier "
-                    "FROM ai_tools WHERE COALESCE(hidden,0)=0 AND ("
-                    + " OR ".join(["(name LIKE ? OR one_liner LIKE ?)"] * len(toks))
-                    + ") ORDER BY name LIMIT ?")
-            a2 = []
+            parts2, score2, pa2 = [], [], []
             for t in toks:
-                a2 += [f'%{t}%'] * 2
-            a2.append(lim - len(res))
+                parts2.append("(name LIKE ? OR one_liner LIKE ?)")
+                score2.append("(CASE WHEN (name LIKE ? OR one_liner LIKE ?) THEN 1 ELSE 0 END)")
+                pa2 += [f'%{t}%'] * 2
+            sql2 = ("SELECT key,name,clean_url AS url,one_liner,category,cn_verdict,icp,price_tier, ("
+                    + " + ".join(score2) + ") AS hits FROM ai_tools "
+                    "WHERE COALESCE(hidden,0)=0 AND ("
+                    + " OR ".join(parts2) + ") ORDER BY hits DESC, length(name) ASC, name LIMIT ?")
+            a2 = pa2 + pa2 + [lim - len(res)]
             for r in _rows(sql2, tuple(a2)):
                 res.append(_entry(r, 'ai_tool'))
-        # 放宽过就不再把整串命中排前面（已按 name 排序）
     return {'query': q, 'tokens': toks, 'category': cat or None,
+            'match': 'any' if relaxed else 'all',
             'count': len(res), 'results': res}
 
 
