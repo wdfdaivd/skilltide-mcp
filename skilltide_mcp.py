@@ -40,8 +40,8 @@ PROTOCOL = '2024-11-05'
 TOOLS = [
     {
         'name': 'search_tools',
-        'description': ('Search Anclum\'s catalogue of 8,250 MCP servers, agent skills and '
-                        'open-source AI projects, plus 1,500 AI tools. Returns name, url, '
+        'description': ('Search Anclum\'s catalogue of MCP servers, agent skills and '
+                        'open-source AI projects, plus AI tools. Returns name, url, '
                         'one-line summary and tags. Read-only.'),
         'inputSchema': {
             'type': 'object',
@@ -56,6 +56,7 @@ TOOLS = [
             },
             'required': ['query'],
         },
+        'annotations': {'readOnlyHint': True, 'idempotentHint': True, 'openWorldHint': False},
     },
     {
         'name': 'get_tool',
@@ -67,6 +68,7 @@ TOOLS = [
             'properties': {'key': {'type': 'string', 'description': 'The entry key/slug'}},
             'required': ['key'],
         },
+        'annotations': {'readOnlyHint': True, 'idempotentHint': True, 'openWorldHint': False},
     },
     {
         'name': 'list_categories',
@@ -74,6 +76,7 @@ TOOLS = [
                         'field tags (e.g. "MCP 服务", "Agent 技能"). Useful for then calling '
                         'search_tools with a category. Read-only.'),
         'inputSchema': {'type': 'object', 'properties': {}},
+        'annotations': {'readOnlyHint': True, 'idempotentHint': True, 'openWorldHint': False},
     },
 ]
 
