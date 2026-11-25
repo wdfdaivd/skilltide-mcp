@@ -11,6 +11,8 @@ Read-only. Zero dependencies. One file.
 
 <a href="https://mcprush.com/to/skilltide-mcp?ref=badge"><img width="190" src="https://mcprush.com/badge/skilltide-mcp/card.svg" alt="Anclum MCP server — rated grade A on mcprush"></a>
 
+[![wdfdaivd/skilltide-mcp MCP server](https://glama.ai/mcp/servers/wdfdaivd/skilltide-mcp/badges/score.svg)](https://glama.ai/mcp/servers/wdfdaivd/skilltide-mcp)
+
 ## Why this one is different
 
 Most directories give you a name and a link. These are the things we actually verified
