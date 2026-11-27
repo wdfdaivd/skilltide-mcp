@@ -33,6 +33,20 @@ before putting an entry in — each of them is checkable from the server's own o
 We do **not** claim this is the best or most complete directory — only that the above are
 true and verifiable.
 
+## What you can verify yourself
+
+Two workflow pages publish a runnable artifact, the exact commands and the measured output,
+so you can reproduce the result byte-for-byte instead of trusting a description:
+
+- **Scrape a URL list to TSV with Playwright MCP** — timeouts, retries and resume, with 6 local
+  fixtures (five broken on purpose) and a self-test that prints `SELFTEST 6/6 PASS`:
+  <https://anclum.com/en/scene/automation/>
+- **Check a repo skeleton with semgrep** — a 6-assertion checker with a 3-case self-test that
+  prints `SELFTEST 3/3 PASS`:
+  <https://anclum.com/en/scene/dev/>
+
+Both pages freeze the `sha256` of their scripts at build time, so a silent edit is visible.
+
 ## Remote endpoint (no install needed)
 
 Anclum is available as a hosted **Streamable HTTP** MCP server — nothing to install:
